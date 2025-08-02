@@ -1,0 +1,248 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Our Plans | RASVANA</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;600;800&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary-color: #0B2447; /* Deep Navy Blue */
+            --secondary-color: #19376D; /* Lighter Navy */
+            --accent-color: #576CBC; /* Soft Blue Accent */
+            --highlight-color: #A5D7E8; /* Light Sky Blue */
+            --text-dark: #212529;
+            --text-light: #F8F9FA;
+            --bg-light: #F8F9FA;
+            --card-bg: #FFFFFF;
+        }
+
+        body {
+            font-family: 'Manrope', sans-serif;
+            background-color: var(--bg-light);
+            color: var(--text-dark);
+        }
+
+        .hero-section {
+            padding: 4rem 0;
+        }
+
+        .hero-title {
+            font-size: 3rem;
+            font-weight: 800;
+            color: var(--primary-color);
+        }
+
+        .hero-subtitle {
+            font-size: 1.15rem;
+            color: #6c757d;
+            max-width: 600px;
+            margin: 0.5rem auto 0 auto;
+        }
+
+        .plan-card {
+            background-color: var(--card-bg);
+            border: 1px solid #e9ecef;
+            border-radius: 16px;
+            padding: 2.5rem;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            display: flex;
+            flex-direction: column;
+            height: 100%;
+        }
+
+        .plan-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 1rem 3rem rgba(0,0,0,0.1);
+        }
+
+        /* The highlighted "Popular" plan */
+        .plan-card.popular {
+            background-color: var(--primary-color);
+            color: var(--text-light);
+            border: none;
+            transform: scale(1.05); /* Make it slightly larger */
+        }
+
+        .plan-card.popular:hover {
+             transform: scale(1.05) translateY(-10px);
+        }
+
+        .badge-popular {
+            display: inline-block;
+            background-color: var(--highlight-color);
+            color: var(--primary-color);
+            padding: 0.3rem 0.8rem;
+            border-radius: 50px;
+            font-weight: 600;
+            font-size: 0.8rem;
+            margin-bottom: 1rem;
+        }
+
+        .plan-name {
+            font-size: 1.5rem;
+            font-weight: 800;
+        }
+
+        .plan-price {
+            font-size: 3rem;
+            font-weight: 800;
+            margin: 0.5rem 0;
+        }
+
+        .plan-card.popular .plan-price,
+        .plan-card.popular .plan-name,
+        .plan-card.popular .text-muted {
+            color: var(--text-light) !important;
+        }
+
+        .plan-features {
+            list-style: none;
+            padding: 0;
+            margin: 1.5rem 0;
+            text-align: left;
+            flex-grow: 1; /* Pushes the button to the bottom */
+        }
+
+        .plan-features li {
+            position: relative;
+            padding-left: 30px;
+            margin-bottom: 12px;
+        }
+
+        .plan-card.popular .plan-features li {
+            color: #e0e0e0;
+        }
+
+        .plan-features li::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 4px;
+            width: 20px;
+            height: 20px;
+            /* SVG Checkmark Icon */
+            background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16' fill='%23576CBC'%3e%3cpath d='M12.736 3.97a.733.733 0 0 1 1.047 0c.286.289.29.756.01 1.05L7.88 12.01a.733.733 0 0 1-1.065.02L3.217 8.384a.757.757 0 0 1 0-1.06.733.733 0 0 1 1.047 0l3.052 3.093 5.4-6.425a.247.247 0 0 1 .02-.022Z'/%3e%3c/svg%3e");
+        }
+
+        /* SVG icon for the popular plan */
+        .plan-card.popular .plan-features li::before {
+             background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16' fill='%23A5D7E8'%3e%3cpath d='M12.736 3.97a.733.733 0 0 1 1.047 0c.286.289.29.756.01 1.05L7.88 12.01a.733.733 0 0 1-1.065.02L3.217 8.384a.757.757 0 0 1 0-1.06.733.733 0 0 1 1.047 0l3.052 3.093 5.4-6.425a.247.247 0 0 1 .02-.022Z'/%3e%3c/svg%3e");
+        }
+
+        .plan-cta-button {
+            border: 2px solid var(--accent-color);
+            color: var(--accent-color);
+            background-color: transparent;
+            font-weight: 600;
+            padding: 0.75rem 1rem;
+            border-radius: 8px;
+            transition: all 0.3s ease;
+            width: 100%;
+            text-decoration: none; /* Remove underline from links styled as buttons */
+            display: inline-block; /* Ensure link takes full width */
+        }
+
+        .plan-cta-button:hover {
+            background-color: var(--accent-color);
+            color: var(--card-bg);
+        }
+
+        .plan-card.popular .plan-cta-button {
+            background-color: var(--highlight-color);
+            border-color: var(--highlight-color);
+            color: var(--primary-color);
+        }
+
+        .plan-card.popular .plan-cta-button:hover {
+            background-color: var(--text-light);
+            border-color: var(--text-light);
+        }
+
+        .custom-plan-section {
+            background-color: var(--card-bg);
+            border-radius: 16px;
+            padding: 2.5rem;
+            margin-top: 4rem;
+        }
+
+    </style>
+</head>
+<body>
+<div th:replace="~{fragments/navbar :: navbar}"></div>
+
+<div class="container text-center hero-section">
+    <h1 class="hero-title">Find the Perfect Plan for You</h1>
+    <p class="hero-subtitle">Start your journey to healthier living with our flexible meal plans, designed for your taste and convenience.</p>
+
+    <div class="row justify-content-center mt-5 g-4 g-lg-5 align-items-center">
+
+        <div class="col-lg-4 col-md-6">
+            <div class="plan-card">
+                <h3 class="plan-name">Basic</h3>
+                <h4 class="plan-price">₹2499<span class="fs-6 text-muted">/mo</span></h4>
+                <p class="fw-semibold">12 Meals</p>
+                <ul class="plan-features">
+                    <li>Choice of any salad or juice</li>
+                    <li>Weekly delivery</li>
+                    <li>Basic customization</li>
+                    <li>Email support</li>
+                </ul>
+                <!-- IMPLEMENTED LINK -->
+                <a href="https://razorpay.me/@foodorder5088" target="_blank" class="btn plan-cta-button">Choose Plan</a>
+            </div>
+        </div>
+
+        <div class="col-lg-4 col-md-6">
+            <div class="plan-card popular">
+                <span class="badge-popular">Most Popular</span>
+                <h3 class="plan-name">Premium</h3>
+                <h4 class="plan-price">₹3999<span class="fs-6 text-muted">/mo</span></h4>
+                <p class="fw-semibold">20 Meals</p>
+                <ul class="plan-features">
+                    <li>Choice of any salad or juice</li>
+                    <li>Bi-weekly delivery</li>
+                    <li>Full customization</li>
+                    <li>Priority support</li>
+                    <li>Free delivery</li>
+                    <li>Nutritionist consultation</li>
+                </ul>
+                <!-- IMPLEMENTED LINK -->
+                <a href="https://razorpay.me/@foodorder5088" target="_blank" class="btn plan-cta-button">Choose Plan</a>
+            </div>
+        </div>
+
+        <div class="col-lg-4 col-md-6">
+            <div class="plan-card">
+                <h3 class="plan-name">Family</h3>
+                <h4 class="plan-price">₹5999<span class="fs-6 text-muted">/mo</span></h4>
+                <p class="fw-semibold">30 Meals</p>
+                <ul class="plan-features">
+                    <li>Choice of any salad or juice</li>
+                    <li>Weekly delivery</li>
+                    <li>Full customization</li>
+                    <li>24/7 Priority support</li>
+                    <li>Free delivery</li>
+                    <li>Family nutritionist consultation</li>
+                    <li>Special occasion treats</li>
+                </ul>
+                <!-- IMPLEMENTED LINK -->
+                <a href="https://razorpay.me/@foodorder5088" target="_blank" class="btn plan-cta-button">Choose Plan</a>
+            </div>
+        </div>
+    </div>
+
+    <div class="custom-plan-section d-md-flex justify-content-between align-items-center">
+        <div>
+            <h5 class="fw-bold text-start">Need something different?</h5>
+            <p class="text-start mb-md-0">We offer custom plans for corporate clients and special dietary needs.</p>
+        </div>
+        <!-- IMPLEMENTED MAILTO LINK -->
+        <a href="mailto:gayyurmansoori4235@gmail.com" class="btn plan-cta-button" style="background-color: var(--secondary-color); color: var(--text-light); border:none; min-width: 150px;">Contact Sales</a>
+    </div>
+</div>
+</body>
+</html>

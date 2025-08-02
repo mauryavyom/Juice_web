@@ -1,0 +1,347 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Create Your Own | Pure Healthy Eats</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="_csrf" th:content="${_csrf.token}"/>
+    <meta name="_csrf_header" th:content="${_csrf.headerName}"/>
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Google Fonts: Poppins for a modern, clean look -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
+    <!-- Font Awesome for icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        body {
+            background-color: #f5f5f4;
+            font-family: 'Poppins', sans-serif;
+        }
+        .option-list button {
+            transition: all 0.2s ease-in-out;
+            background: #fff;
+            border: 1px solid #e7e5e4;
+            margin-bottom: 8px;
+            width: 100%;
+            text-align: left;
+            border-radius: 0.5rem;
+            box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.05);
+        }
+        .option-list button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+        }
+        .option-list button.active {
+            background-color: #16a34a !important;
+            color: #fff !important;
+            border-color: #16a34a;
+            box-shadow: 0 4px 6px -1px rgba(22, 163, 74, 0.3), 0 2px 4px -1px rgba(22, 163, 74, 0.2);
+        }
+        .total-bar {
+            font-size: 1.75rem;
+            color: #16a34a;
+        }
+        .brand-logo img {
+            height: 42px;
+        }
+        .navbar-custom {
+            background: none;
+            box-shadow: none;
+        }
+        .hide {
+            display: none;
+        }
+        .builder-container {
+            background-color: #ffffff;
+            padding: 2rem;
+            border-radius: 1rem;
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+        }
+    </style>
+</head>
+<body>
+
+<div th:replace="~{fragments/navbar :: navbar}"></div>
+
+<div class="container py-5 max-w-7xl mx-auto px-4">
+    <h1 class="text-center font-extrabold text-green-600 mb-6 text-4xl md:text-5xl" id="builder-title">Create Your Own</h1>
+    <div class="flex justify-center mb-6 space-x-3">
+        <button type="button" class="btn btn-lg bg-green-600 text-white hover:bg-green-700" id="btn-salad">Custom Salad</button>
+        <button type="button" class="btn btn-lg bg-transparent text-green-600 border border-green-600 hover:bg-green-50" id="btn-juice">Custom Juice</button>
+    </div>
+
+    <div class="text-end mb-4">
+        <a href="/cart" class="btn btn-primary rounded-pill px-4 py-2 shadow">
+            <i class="fas fa-shopping-cart me-2"></i>Cart (<span id="cart-size" th:text="${cartSize}"></span>)
+        </a>
+    </div>
+
+    <div id="salad-builder" class="builder-container">
+        <div class="row g-6 mb-5">
+            <div class="col-md-4">
+                <h5 class="font-bold text-lg mb-4 text-green-700">Choose Your Base</h5>
+                <div class="option-list" id="base-options">
+                    <button type="button" class="btn" data-name="Lettuce" data-price="30">Lettuce <span class="float-end text-muted">₹30</span></button>
+                    <button type="button" class="btn" data-name="Spinach" data-price="40">Spinach <span class="float-end text-muted">₹40</span></button>
+                    <button type="button" class="btn" data-name="Kale" data-price="50">Kale <span class="float-end text-muted">₹50</span></button>
+                    <button type="button" class="btn" data-name="Arugula" data-price="45">Arugula <span class="float-end text-muted">₹45</span></button>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <h5 class="font-bold text-lg mb-4 text-green-700">Add Toppings</h5>
+                <div class="option-list" id="topping-options">
+                    <button type="button" class="btn" data-name="Cherry Tomatoes" data-price="20">Cherry Tomatoes <span class="float-end text-muted">₹20</span></button>
+                    <button type="button" class="btn" data-name="Cucumber" data-price="15">Cucumber <span class="float-end text-muted">₹15</span></button>
+                    <button type="button" class="btn" data-name="Carrots" data-price="15">Carrots <span class="float-end text-muted">₹15</span></button>
+                    <button type="button" class="btn" data-name="Avocado" data-price="60">Avocado <span class="float-end text-muted">₹60</span></button>
+                    <button type="button" class="btn" data-name="Roasted Chickpeas" data-price="30">Roasted Chickpeas <span class="float-end text-muted">₹30</span></button>
+                    <button type="button" class="btn" data-name="Mixed Nuts" data-price="50">Mixed Nuts <span class="float-end text-muted">₹50</span></button>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <h5 class="font-bold text-lg mb-4 text-green-700">Select Dressing</h5>
+                <div class="option-list" id="dressing-options">
+                    <button type="button" class="btn" data-name="Balsamic Vinaigrette" data-price="25">Balsamic Vinaigrette <span class="float-end text-muted">₹25</span></button>
+                    <button type="button" class="btn" data-name="Ranch" data-price="25">Ranch <span class="float-end text-muted">₹25</span></button>
+                    <button type="button" class="btn" data-name="Tahini" data-price="35">Tahini <span class="float-end text-muted">₹35</span></button>
+                    <button type="button" class="btn" data-name="Olive Oil & Lemon" data-price="20">Olive Oil & Lemon <span class="float-end text-muted">₹20</span></button>
+                </div>
+            </div>
+        </div>
+
+        <div class="row mt-4">
+            <div class="col-12">
+                <form id="custom-salad-form">
+                    <div class="d-flex align-items-center justify-content-between mb-4 bg-gray-100 p-4 rounded-lg">
+                        <span class="font-bold text-xl text-green-800">Total:</span>
+                        <span class="font-bold total-bar" id="total-price">₹0</span>
+                    </div>
+                    <div>
+                        <button type="submit" class="btn btn-lg bg-green-600 w-100 text-white hover:bg-green-700 fs-5 rounded-lg shadow-lg hover:shadow-xl transition" id="add-to-cart-btn">
+                            <i class="fas fa-plus me-2"></i> Add to Cart
+                        </button>
+                    </div>
+                    <div class="mt-3 p-3 text-center rounded-lg" id="result-message" style="display:none;"></div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <div id="juice-builder" class="builder-container hide">
+        <div class="row g-6 mb-5">
+            <div class="col-md-4">
+                <h5 class="font-bold text-lg mb-4 text-green-700">Choose Your Base</h5>
+                <div class="option-list" id="juice-base-options">
+                    <button type="button" class="btn" data-name="Orange" data-price="40">Orange <span class="float-end text-muted">₹40</span></button>
+                    <button type="button" class="btn" data-name="Watermelon" data-price="45">Watermelon <span class="float-end text-muted">₹45</span></button>
+                    <button type="button" class="btn" data-name="Mango" data-price="50">Mango <span class="float-end text-muted">₹50</span></button>
+                    <button type="button" class="btn" data-name="Pineapple" data-price="55">Pineapple <span class="float-end text-muted">₹55</span></button>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <h5 class="font-bold text-lg mb-4 text-green-700">Add-ons</h5>
+                <div class="option-list" id="juice-addon-options">
+                    <button type="button" class="btn" data-name="Mint" data-price="10">Mint <span class="float-end text-muted">₹10</span></button>
+                    <button type="button" class="btn" data-name="Honey" data-price="15">Honey <span class="float-end text-muted">₹15</span></button>
+                    <button type="button" class="btn" data-name="Chia Seeds" data-price="20">Chia Seeds <span class="float-end text-muted">₹20</span></button>
+                    <button type="button" class="btn" data-name="Ginger" data-price="10">Ginger <span class="float-end text-muted">₹10</span></button>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <h5 class="font-bold text-lg mb-4 text-green-700">Sweetener</h5>
+                <div class="option-list" id="juice-sweetener-options">
+                    <button type="button" class="btn" data-name="No Added Sugar" data-price="0">No Added Sugar <span class="float-end text-muted">₹0</span></button>
+                    <button type="button" class="btn" data-name="Jaggery" data-price="15">Jaggery <span class="float-end text-muted">₹15</span></button>
+                    <button type="button" class="btn" data-name="Stevia" data-price="20">Stevia <span class="float-end text-muted">₹20</span></button>
+                </div>
+            </div>
+        </div>
+
+        <div class="row mt-4">
+            <div class="col-12">
+                <form id="custom-juice-form">
+                    <div class="d-flex align-items-center justify-content-between mb-4 bg-gray-100 p-4 rounded-lg">
+                        <span class="font-bold text-xl text-green-800">Total:</span>
+                        <span class="font-bold total-bar" id="juice-total-price">₹0</span>
+                    </div>
+                    <div>
+                        <button type="submit" class="btn btn-lg bg-green-600 w-100 text-white hover:bg-green-700 fs-5 rounded-lg shadow-lg hover:shadow-xl transition" id="add-to-cart-btn-juice">
+                            <i class="fas fa-plus me-2"></i> Add to Cart
+                        </button>
+                    </div>
+                    <div class="mt-3 p-3 text-center rounded-lg" id="juice-result-message" style="display:none;"></div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+<script>
+    $(function () {
+        const token = $("meta[name='_csrf']").attr("content");
+        const header = $("meta[name='_csrf_header']").attr("content");
+        $(document).ajaxSend(function(e, xhr, options) {
+            xhr.setRequestHeader(header, token);
+        });
+
+        let selectedBase = null, selectedDressing = null, selectedToppings = [];
+        let selectedJuiceBase = null, selectedSweetener = null, selectedJuiceAddons = [];
+
+        // Salad builder logic
+        $('#base-options button').on('click', function() {
+            $('#base-options button').removeClass('active');
+            $(this).addClass('active');
+            selectedBase = {name: $(this).data('name'), price: Number($(this).data('price'))};
+            updateTotal();
+        });
+        $('#topping-options button').on('click', function() {
+            $(this).toggleClass('active');
+            selectedToppings = $('#topping-options button.active').map(function() {
+                return {name: $(this).data('name'), price: Number($(this).data('price'))};
+            }).get();
+            updateTotal();
+        });
+        $('#dressing-options button').on('click', function() {
+            $('#dressing-options button').removeClass('active');
+            $(this).addClass('active');
+            selectedDressing = {name: $(this).data('name'), price: Number($(this).data('price'))};
+            updateTotal();
+        });
+
+        function updateTotal() {
+            let total = 0;
+            if (selectedBase) total += selectedBase.price;
+            if (selectedDressing) total += selectedDressing.price;
+            selectedToppings.forEach(t => total += t.price);
+            $('#total-price').text('₹' + total);
+        }
+
+        // Juice builder logic
+        $('#juice-base-options button').on('click', function() {
+            $('#juice-base-options button').removeClass('active');
+            $(this).addClass('active');
+            selectedJuiceBase = {name: $(this).data('name'), price: Number($(this).data('price'))};
+            juiceUpdateTotal();
+        });
+
+        $('#juice-addon-options button').on('click', function() {
+            $(this).toggleClass('active');
+            selectedJuiceAddons = $('#juice-addon-options button.active').map(function() {
+                return {name: $(this).data('name'), price: Number($(this).data('price'))};
+            }).get();
+            juiceUpdateTotal();
+        });
+
+        $('#juice-sweetener-options button').on('click', function() {
+            $('#juice-sweetener-options button').removeClass('active');
+            $(this).addClass('active');
+            selectedSweetener = {name: $(this).data('name'), price: Number($(this).data('price'))};
+            juiceUpdateTotal();
+        });
+
+        function juiceUpdateTotal() {
+            let total = 0;
+            if (selectedJuiceBase) total += selectedJuiceBase.price;
+            if (selectedSweetener) total += selectedSweetener.price;
+            selectedJuiceAddons.forEach(a => total += a.price);
+            $('#juice-total-price').text('₹' + total);
+        }
+
+        // Salad form submission
+        $('#custom-salad-form').on('submit', function(e) {
+            e.preventDefault();
+            const msg = $('#result-message');
+            if (!selectedBase) {
+                msg.text('Please select a base.').show().removeClass('alert-success').addClass('alert-warning');
+                return;
+            }
+            if (!selectedDressing) {
+                msg.text('Please select a dressing.').show().removeClass('alert-success').addClass('alert-warning');
+                return;
+            }
+
+            const toppingsString = selectedToppings.map(t => t.name).join(', ');
+            const customItem = {
+                name: "Custom Salad",
+                description: `Base: ${selectedBase.name}. Toppings: ${toppingsString || 'None'}. Dressing: ${selectedDressing.name}.`,
+                price: parseFloat($('#total-price').text().replace('₹', ''))
+            };
+
+            $.ajax({
+                type: 'POST',
+                url: '/cart/add/custom',
+                contentType: 'application/json',
+                data: JSON.stringify(customItem),
+                success: function(response) {
+                    msg.text('Custom Salad added to cart!').show().removeClass('alert-warning').addClass('alert-success');
+                    $('#cart-size').text(response.cartSize);
+                },
+                error: function() {
+                    msg.text('Error adding item to cart. Please try again.').show().removeClass('alert-success').addClass('alert-danger');
+                }
+            });
+        });
+
+        // Juice form submission
+        $('#custom-juice-form').on('submit', function(e) {
+            e.preventDefault();
+            const msg = $('#juice-result-message');
+            if (!selectedJuiceBase) {
+                msg.text('Please select a base.').show().removeClass('alert-success').addClass('alert-warning');
+                return;
+            }
+            if (!selectedSweetener) {
+                msg.text('Please select a sweetener.').show().removeClass('alert-success').addClass('alert-warning');
+                return;
+            }
+
+            const addonsString = selectedJuiceAddons.map(a => a.name).join(', ');
+            const customItem = {
+                name: "Custom Juice",
+                description: `Base: ${selectedJuiceBase.name}. Add-ons: ${addonsString || 'None'}. Sweetener: ${selectedSweetener.name}.`,
+                price: parseFloat($('#juice-total-price').text().replace('₹', ''))
+            };
+
+            $.ajax({
+                type: 'POST',
+                url: '/cart/add/custom',
+                contentType: 'application/json',
+                data: JSON.stringify(customItem),
+                success: function(response) {
+                    msg.text('Custom Juice added to cart!').show().removeClass('alert-warning').addClass('alert-success');
+                    $('#cart-size').text(response.cartSize);
+                },
+                error: function() {
+                    msg.text('Error adding item to cart. Please try again.').show().removeClass('alert-success').addClass('alert-danger');
+                }
+            });
+        });
+
+        // Toggle builder tabs
+        $('#btn-salad').on('click', function() {
+            $(this).addClass('bg-green-600 text-white').removeClass('bg-transparent text-green-600');
+            $('#btn-juice').removeClass('bg-green-600 text-white').addClass('bg-transparent text-green-600 border border-green-600');
+            $('#builder-title').text("Create Your Own Salad");
+            $('#salad-builder').removeClass('hide');
+            $('#juice-builder').addClass('hide');
+        });
+
+        $('#btn-juice').on('click', function() {
+            $(this).addClass('bg-green-600 text-white').removeClass('bg-transparent text-green-600');
+            $('#btn-salad').removeClass('bg-green-600 text-white').addClass('bg-transparent text-green-600 border border-green-600');
+            $('#builder-title').text("Create Your Own Juice");
+            $('#salad-builder').addClass('hide');
+            $('#juice-builder').removeClass('hide');
+        });
+
+        // Initial setup
+        $('#btn-salad').trigger('click');
+    });
+</script>
+</body>
+</html>

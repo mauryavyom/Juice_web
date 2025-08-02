@@ -1,0 +1,258 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Menu</title>
+    <meta name="_csrf" th:content="${_csrf.token}"/>
+    <meta name="_csrf_header" th:content="${_csrf.headerName}"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Font Awesome for Icons (Optional, but recommended for better visuals) -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <!-- Custom Styles for UI Enhancements -->
+    <style>
+        body {
+            background-color: #f8f9fa; /* Light gray background */
+            font-family: 'Inter', sans-serif;
+        }
+        .container {
+            max-width: 1200px;
+        }
+        .menu-card {
+            border-radius: 1rem;
+            overflow: hidden;
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            background-color: #ffffff;
+            border: none;
+            height: 100%;
+        }
+        .menu-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 12px 24px rgba(0, 0, 0, 0.15);
+        }
+        .menu-card-img {
+            height: 250px; /* Consistent image height */
+            object-fit: cover;
+            width: 100%;
+            border-bottom: 1px solid #e9ecef;
+        }
+        .card-body {
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+        .card-title {
+            font-weight: 700;
+            font-size: 1.25rem;
+            color: #343a40;
+        }
+        .card-text {
+            flex-grow: 1;
+            color: #6c757d;
+        }
+        .cart-action {
+            margin-top: 1rem;
+        }
+        .btn-add-to-cart {
+            font-weight: 600;
+            transition: background-color 0.2s;
+        }
+        .quantity-controls {
+            width: 150px;
+            margin: 0 auto;
+        }
+        .quantity-controls .btn {
+            width: 40px;
+            font-weight: 700;
+        }
+        .quantity-controls .qty {
+            border-left: none;
+            border-right: none;
+            background-color: #f8f9fa;
+        }
+        .cart-icon-btn {
+            font-size: 1rem;
+            font-weight: 600;
+            border-radius: 50px;
+            padding: 0.5rem 1.5rem;
+        }
+    </style>
+</head>
+<body>
+
+<!-- Navbar fragment -->
+<div th:replace="~{fragments/navbar :: navbar}"></div>
+
+<div class="container mt-5">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h2 class="text-center fw-bold">Our Menu</h2>
+        <a href="/cart" class="btn btn-primary cart-icon-btn">
+            <i class="fas fa-shopping-cart me-2"></i>Cart (<span id="cart-size" th:text="${cartSize}"></span>)
+        </a>
+    </div>
+
+    <div class="row">
+        <div class="col-lg-4 col-md-6 mb-4" th:each="product : ${products}">
+            <div class="card menu-card h-100">
+                <!-- Conditional image logic to set different images based on product ID -->
+                <div th:switch="${product.id}">
+                    <img th:case="1" src="mixvegsalad.png"
+                         class="card-img-top menu-card-img" alt="Product Image">
+                    <img th:case="2" src="mixfruitsal.png"
+                         class="card-img-top menu-card-img" alt="Product Image">
+                    <img th:case="3" src="gardenmixsal.png"
+                         class="card-img-top menu-card-img" alt="Product Image">
+<!--                    &lt;!&ndash; Default fallback for any other product IDs &ndash;&gt;-->
+<!--                    <img th:case="*" src="https://placehold.co/400x250/e9ecef/6c757d?text=No+Image"-->
+<!--                         class="card-img-top menu-card-img" alt="Product Image">-->
+                    <img th:case="4" src="orangejuice.png"
+                         class="card-img-top menu-card-img" alt="Product Image">
+                    <img th:case="5" src="watermelonjuice.png"
+                         class="card-img-top menu-card-img" alt="Product Image">
+                    <img th:case="6" src="mangojuice.png"
+                         class="card-img-top menu-card-img" alt="Product Image">
+                </div>
+                <div class="card-body">
+                    <h5 class="card-title" th:text="${product.name}"></h5>
+                    <p class="card-text" th:text="${product.description}"></p>
+                    <div class="mt-auto">
+                        <div class="d-flex justify-content-between align-items-center">
+                            <p class="h5 fw-bold mb-0">
+                                ₹<span th:text="${product.price}"></span>
+                            </p>
+                            <div th:attr="data-id=${product.id}" class="cart-action">
+                                <button th:if="${!cartItemIds.contains(product.id)}"
+                                        class="btn btn-success btn-add-to-cart">
+                                    Add to Cart
+                                </button>
+                                <div th:if="${cartItemIds.contains(product.id)}"
+                                     class="d-flex justify-content-center">
+                                    <div class="input-group quantity-controls">
+                                        <button class="btn btn-outline-secondary decrease" aria-label="Decrease quantity">
+                                            <i class="fas fa-minus"></i>
+                                        </button>
+                                        <input type="text"
+                                               th:value="${cartQuantities[product.id]}"
+                                               class="form-control text-center qty" readonly/>
+                                        <button class="btn btn-outline-secondary increase" aria-label="Increase quantity">
+                                            <i class="fas fa-plus"></i>
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- jQuery and Bootstrap JS -->
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
+<script>
+    $(function () {
+        const token = $("meta[name='_csrf']").attr("content");
+        const header = $("meta[name='_csrf_header']").attr("content");
+        $(document).ajaxSend(function(e, xhr, options) {
+            xhr.setRequestHeader(header, token);
+        });
+    });
+
+    $(document).ready(function() {
+
+        // Update cart size in navbar
+        function updateCartSize(size) {
+            $('#cart-size').text(size);
+        }
+
+        // Render quantity controls HTML for a product container
+        function renderQuantityControls(container, quantity) {
+            container.html(`
+                <div class="d-flex justify-content-center">
+                    <div class="input-group quantity-controls">
+                        <button class="btn btn-outline-secondary decrease" aria-label="Decrease quantity"><i class="fas fa-minus"></i></button>
+                        <input type="text" value="${quantity}" class="form-control text-center qty" readonly>
+                        <button class="btn btn-outline-secondary increase" aria-label="Increase quantity"><i class="fas fa-plus"></i></button>
+                    </div>
+                </div>
+            `);
+        }
+
+        // Add to Cart button click handler
+        $(document).on('click', '.btn-add-to-cart', function(e) {
+            e.preventDefault();
+
+            const button = $(this);
+            const container = button.closest('.cart-action');
+            const id = container.data('id');
+
+            // Show a loading state
+            const originalText = button.html();
+            button.prop('disabled', true).html('<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> Adding...');
+
+            $.post(`/add-to-cart/${id}`)
+                .done(function(response) {
+                    updateCartSize(response.cartSize);
+                    renderQuantityControls(container, response.quantity);
+                })
+                .fail(function() {
+                    // Use a simple alert, as this is a non-critical error for this context
+                    alert('Failed to add item to cart. Please try again.');
+                })
+                .always(function() {
+                    button.prop('disabled', false).html(originalText);
+                });
+        });
+
+        // Increase quantity handler
+        $(document).on('click', '.increase', function() {
+            const container = $(this).closest('.cart-action');
+            const qtyInput = container.find('.qty');
+            let qty = parseInt(qtyInput.val()) + 1;
+            qtyInput.val(qty);
+            const id = container.data('id');
+
+            $.post(`/cart/update/${id}?quantity=${qty}`)
+                .done(function(response) {
+                    updateCartSize(response.cartSize);
+                })
+                .fail(function() {
+                    alert('Failed to update quantity. Try again.');
+                });
+        });
+
+        // Decrease quantity handler
+        $(document).on('click', '.decrease', function() {
+            const container = $(this).closest('.cart-action');
+            const qtyInput = container.find('.qty');
+            let qty = parseInt(qtyInput.val()) - 1;
+            const id = container.data('id');
+
+            if (qty > 0) {
+                qtyInput.val(qty);
+                $.post(`/cart/update/${id}?quantity=${qty}`)
+                    .done(function(response) {
+                        updateCartSize(response.cartSize);
+                    })
+                    .fail(function() {
+                        alert('Failed to update quantity. Try again.');
+                    });
+            } else {
+                container.html(`<button class="btn btn-success btn-add-to-cart">Add to Cart</button>`);
+                $.get(`/cart/remove/${id}`)
+                    .done(function(response) {
+                        updateCartSize(response.cartSize);
+                    })
+                    .fail(function() {
+                        alert('Failed to remove item. Try again.');
+                    });
+            }
+        });
+    });
+</script>
+</body>
+</html>

@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<!-- The xmlns:th attribute enables Thymeleaf for this page -->
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pure Healthy Eats</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+
+<body style="margin:0; font-family: Arial, sans-serif;">
+
+<!-- This div will be replaced by the navbar fragment -->
+<div th:replace="~{fragments/navbar :: navbar}"></div>
+
+<!-- Hero section -->
+<section style="text-align: center; padding: 60px 20px;">
+    <img th:src="@{/logo.png}" alt="logo" style="width: 170px; height: auto;">
+    <h1 style="font-size: 48px; color: #035f2e; font-weight: bold; margin-bottom: 10px;">
+        Fresh & Healthy Food <br> Delivered To You
+    </h1>
+    <p style="font-size: 18px; color: gray; max-width: 600px; margin: 0 auto;">
+        Discover our delicious selection of fresh salads and natural juices, made with the finest ingredients for your healthy lifestyle.
+    </p>
+</section>
+
+<!-- Product section -->
+<section style="display: flex; justify-content: center; gap: 40px; padding: 40px 20px; flex-wrap: wrap;">
+    <div style="width: 300px; box-shadow: 0 4px 10px rgba(0,0,0,0.1); border-radius: 10px; overflow: hidden; text-align: center; background: #fff;">
+        <img th:src="@{/salad.png}" alt="Fresh salad" style="width: 100%; height: 200px; object-fit: cover;">
+        <div style="padding: 20px;">
+            <h3 style="margin-bottom: 10px;">Fresh salads</h3>
+            <p style="color: gray; font-size: 14px;">Customizable salads</p>
+        </div>
+    </div>
+
+    <div style="width: 300px; box-shadow: 0 4px 10px rgba(0,0,0,0.1); border-radius: 10px; overflow: hidden; text-align: center; background: #fff;">
+        <img th:src="@{/juice.png}" alt="Natural Juice" style="width: 100%; height: 200px; object-fit: cover;">
+        <div style="padding: 20px;">
+            <h3 style="margin-bottom: 10px;">Natural Juice</h3>
+            <p style="color: gray; font-size: 14px;">Cold-pressed juices made from fresh fruits and vegetables</p>
+        </div>
+    </div>
+</section>
+
+<!-- Call to Action Button -->
+<div style="display: flex; justify-content: center; margin-top: 20px; padding-bottom: 40px;">
+    <a th:href="@{/menu}" style="padding: 15px 30px; background-color: orange; color: white; font-size: 18px; font-weight: bold; border-radius: 8px; text-decoration: none; display: inline-block;">
+        View Our Menu
+    </a>
+</div>
+
+</body>
+</html>
