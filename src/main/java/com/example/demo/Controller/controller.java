@@ -43,7 +43,7 @@ public class controller {
     @GetMapping("/")
     public String showLandingPage() {
 
-        return "Main_Home_page"; // This should match your landing.html
+        return "Main_Home_page";
     }
 
     @GetMapping("/home")
@@ -56,7 +56,7 @@ public class controller {
     public String customize(Model model) {
         int cartSize = cartService.getCartItems().size();
 
-        // ✅ Add the cart size to the model so the HTML can access it
+        // Add the cart size to the model so the HTML can access it
         model.addAttribute("cartSize", cartSize);
         return "Customize";
     }
@@ -87,7 +87,7 @@ public class controller {
     }
 
 
-    // ✅ View Cart
+    // View Cart
     @GetMapping("/cart")
     public String viewCart(Model model) {
         List<CartItem> cartItems = cartService.getCartItems();
@@ -97,7 +97,7 @@ public class controller {
         return "cart";
     }
 
-    // ✅ Add Product to Cart (AJAX)
+    //  Add Product to Cart (AJAX)
     @PostMapping("/add-to-cart/{id}")
     @ResponseBody
     public Map<String, Object> addToCart(@PathVariable int id) {
@@ -110,7 +110,7 @@ public class controller {
         return response;
     }
 
-    // ✅ Remove Product (AJAX)
+    //  Remove Product (AJAX)
     @GetMapping("/cart/remove/{id}")
     @ResponseBody
     public Map<String, Object> removeProduct(@PathVariable int id) {
@@ -122,16 +122,38 @@ public class controller {
         return response;
     }
 
-    // ✅ Update Cart Quantity (AJAX)
+    //  Update Cart Quantity (AJAX)
+//    @PostMapping("/cart/update/{id}")
+//    @ResponseBody
+//    public Map<String, Object> updateCartQuantity(@PathVariable int id, @RequestParam int quantity) {
+//        cartService.updateQuantity(id, quantity);
+//
+//        Map<String, Object> response = new HashMap<>();
+//        response.put("cartSize", cartService.getCartItems().size());
+//        response.put("quantity", quantity);
+//        response.put("totalAmount", cartService.getCartItems().stream().mapToDouble(CartItem::getSubtotal).sum());
+//        return response;
+//    }
+    //  In controller.java
+
     @PostMapping("/cart/update/{id}")
     @ResponseBody
     public Map<String, Object> updateCartQuantity(@PathVariable int id, @RequestParam int quantity) {
         cartService.updateQuantity(id, quantity);
 
+        // ✅ Find the updated item to get its new subtotal
+        double itemSubtotal = cartService.getCartItems().stream()
+                .filter(item -> item.getId() == id)
+                .findFirst()
+                .map(CartItem::getSubtotal)
+                .orElse(0.0);
+
         Map<String, Object> response = new HashMap<>();
         response.put("cartSize", cartService.getCartItems().size());
         response.put("quantity", quantity);
+        response.put("itemSubtotal", itemSubtotal); // ✅ Add the item's new subtotal to the response
         response.put("totalAmount", cartService.getCartItems().stream().mapToDouble(CartItem::getSubtotal).sum());
+
         return response;
     }
 
@@ -140,7 +162,7 @@ public class controller {
 
     @PostMapping("/cart/add/custom")
     @ResponseBody
-    public ResponseEntity<?> addCustomItemToCart(@RequestBody CustomItemRequest customItem) { // ✅ REMOVED HttpSession
+    public ResponseEntity<?> addCustomItemToCart(@RequestBody CustomItemRequest customItem) { // REMOVED HttpSession
 
         // Call the service method directly, without the session
         cartService.addCustomItemToCart(customItem.getName(), customItem.getPrice());
