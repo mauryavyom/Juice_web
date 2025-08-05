@@ -23,10 +23,9 @@ NOTE:
 ---
 
 ## 🛠️ Tech Stack
-* **Frontend:** React, Tailwind CSS
-* **Backend:** Node.js, Express.js
-* **Database:** MongoDB
-* **Deployment:** Vercel, Render
+* **Frontend:** HTML, CSS, JavaScript
+* **Backend:** Spring Boot (Java)
+* **Database:** MySQL
 
 ---
 
@@ -35,9 +34,9 @@ NOTE:
 Follow these instructions to get a local copy up and running.
 
 ### Prerequisites
-* [Node.js](https://nodejs.org/en/)
-* [npm](https://www.npmjs.com/)
-* [Git](https://git-scm.com/)
+* [JDK (Java Development Kit)](https://www.oracle.com/java/technologies/downloads/) 17 or higher
+* [Maven](https://maven.apache.org/download.cgi) or [Gradle](https://gradle.org/install/)
+* [MySQL](https://dev.mysql.com/downloads/installer/)
 
 ### Installation & Setup
 
@@ -46,37 +45,28 @@ Follow these instructions to get a local copy up and running.
     git clone [https://github.com/](https://github.com/)[Your-GitHub-Username]/[Your-Repo-Name].git
     ```
 
-2.  **Install dependencies for both server and client:**
+2.  **Navigate to the project directory:**
     ```bash
-    # Install server dependencies
-    cd [Your-Repo-Name]/server
-    npm install
-
-    # Install client dependencies
-    cd ../client
-    npm install
+    cd [Your-Repo-Name]
     ```
 
-3.  **Set up Environment Variables:**
-    Create a `.env` file in the `/server` directory and add the following:
-    ```env
-    MONGO_URI="your_mongodb_connection_string"
-    JWT_SECRET="your_super_secret_jwt_key"
+3.  **Set up Backend Environment Variables:**
+    Open the `src/main/resources/application.properties` file and configure your MySQL database connection:
+    ```properties
+    spring.datasource.url=jdbc:mysql://localhost:3306/[your_database_name]
+    spring.datasource.username=[your_mysql_username]
+    spring.datasource.password=[your_mysql_password]
+    spring.jpa.hibernate.ddl-auto=update
     ```
 
 ### Running the App
 
-1.  **Start the backend server:**
+1.  **Run the Spring Boot application:**
     ```bash
-    # From the /server directory
-    npm run dev
+    # From the root project directory
+    mvn spring-boot:run
     ```
-
-2.  **Start the frontend client:**
-    ```bash
-    # From the /client directory
-    npm run dev
-    ```
+    The application and frontend will be available at `http://localhost:8080`.
 
 ---
 
