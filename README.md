@@ -4,9 +4,9 @@ NOTE:
 - The HTML comments (like this one) are for guidance and should be removed from your final README.
 -->
 
-# [Your Project Name]
+# Juice web
 
-> A modern, responsive web application for [describe the main purpose, e.g., tracking personal fitness goals].
+> A modern, responsive web application for easy delivery of salad and juice.
 
 <p align="center">
   <!-- A high-quality screenshot or GIF is the best way to show off your work! -->
@@ -67,6 +67,15 @@ Follow these instructions to get a local copy up and running.
     mvn spring-boot:run
     ```
     The application and frontend will be available at `http://localhost:8080`.
+
+---
+
+## 👥 Team
+This project was brought to you by:
+* Vyom
+* Bhavesh
+* Sarvesh
+* Gayyur
 
 ---
 
